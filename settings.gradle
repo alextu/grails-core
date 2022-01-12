@@ -4,15 +4,31 @@ plugins {
 }
 
 gradleEnterprise {
-    server = 'https://ge.grails.org'
+    //server = 'https://ge.grails.org'
     buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
         publishAlways()
-        publishIfAuthenticated()
+        //publishIfAuthenticated()
         uploadInBackground = System.getenv("CI") == null
         capture {
             taskInputFiles = true
         }
     }
+
+    buildCache {
+        local { enabled = false } 
+        remote(HttpBuildCache) {
+            push = true
+            enabled = true
+            url = 'https://cache-node-solutions.grdev.net/cache/'
+            credentials {
+                username = 'grails-ci'
+                password = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY')
+            }
+        }
+    }
+
 
 }
 
