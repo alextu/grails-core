@@ -4,29 +4,29 @@ plugins {
 }
 
 gradleEnterprise {
-    server = 'https://ge.grails.org'
     buildScan {
         publishAlways()
-        publishIfAuthenticated()
         uploadInBackground = System.getenv("CI") == null
         capture {
             taskInputFiles = true
         }
     }
-
 }
 
 buildCache {
-    local { enabled = System.getenv('CI') != 'true' }
+    local { enabled = false }                     // must be false for this experiment
     remote(HttpBuildCache) {
-        push = System.getenv('CI') == 'true'
-        enabled = true
-        url = 'https://ge.grails.org/cache/'
-        credentials {
-            username = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER')
-            password = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY')
+        url = 'https://cache-node-solutions.grdev.net/cache/exp4/'  // adjust to your GE hostname, and note the trailing slash
+        allowUntrustedServer = true                 // set to false if a trusted certificate is configured for the GE server
+        credentials { creds ->
+            // inject credentials with read-write access to the remote build cache via env vars set in your CI environment
+            creds.username = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER')
+            creds.password = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY')
         }
-    }}
+        enabled = true                              // must be true for this experiment
+        push = System.getenv("CI") == 'true'   // adjust to an env var that is always present only in your CI environment
+    }
+}
 
 rootProject.name = "grails.core.ROOT"
 
