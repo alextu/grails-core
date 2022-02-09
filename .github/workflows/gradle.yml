@@ -34,6 +34,7 @@ jobs:
         with:
           arguments: check
         env:
+          GRADLE_ENTERPRISE_URL: ${{ secrets.GRADLE_ENTERPRISE_URL }}
           GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER: ${{ secrets.GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER }}
           GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY: ${{ secrets.GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY }}
       - name: Run Build
