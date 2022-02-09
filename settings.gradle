@@ -4,6 +4,7 @@ plugins {
 }
 
 gradleEnterprise {
+    server = 'https://ge.solutions-team.gradle.com'
     buildScan {
         publishAlways()
         uploadInBackground = System.getenv("CI") == null
