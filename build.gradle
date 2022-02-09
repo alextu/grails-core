@@ -284,6 +284,8 @@ allprojects {
     // This added to prevent remote cache miss, because project JAR include manifest file with Build-By and Created-By properties which might be different for CI vs Local.
     normalization {
         runtimeClasspath {
+            properties('**/grails.factories') {
+            }
             metaInf {
                 ignoreAttribute("Built-By")
                 ignoreAttribute("Created-By")
