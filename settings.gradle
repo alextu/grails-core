@@ -17,7 +17,7 @@ gradleEnterprise {
 buildCache {
     local { enabled = false }                     // must be false for this experiment
     remote(HttpBuildCache) {
-        url = 'https://cache-node-solutions.grdev.net/cache/exp5-run6/'  // adjust to your GE hostname, and note the trailing slash
+        url = 'https://cache-node-solutions.grdev.net/cache/exp5-run7/'  // adjust to your GE hostname, and note the trailing slash
         allowUntrustedServer = true                 // set to false if a trusted certificate is configured for the GE server
         credentials { creds ->
             // inject credentials with read-write access to the remote build cache via env vars set in your CI environment
