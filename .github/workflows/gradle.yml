@@ -48,6 +48,11 @@ jobs:
           GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY: ${{ secrets.GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY }}
         with:
           arguments: build
+      - name: Archive for investigation
+        uses: actions/upload-artifact@v2
+        with:
+          name: grails-web-boot-classes
+          path: grails-web-boot/build/classes
       - name: Publish Test Report
         if: steps.build.outcome == 'failure' || steps.tests.outcome == 'failure'
         uses: scacap/action-surefire-report@v1
