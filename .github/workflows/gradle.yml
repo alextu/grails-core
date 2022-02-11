@@ -47,7 +47,7 @@ jobs:
           GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER: ${{ secrets.GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER }}
           GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY: ${{ secrets.GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY }}
         with:
-          arguments: build -Dorg.gradle.internal.http.idleConnectionTimeout=1
+          arguments: build
       - name: Archive for investigation
         uses: actions/upload-artifact@v2
         with:

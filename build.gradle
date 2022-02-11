@@ -203,7 +203,7 @@ if (jointBuildGroovyJarProperty) {
 }
 
 if (isReleaseVersion) {
-    apply plugin: 'maven-publish'
+    //apply plugin: 'maven-publish'
     apply plugin: "io.github.gradle-nexus.publish-plugin"
 
     nexusPublishing {
@@ -349,8 +349,8 @@ subprojects { project ->
     apply plugin: 'java-library'
     apply plugin: 'groovy'
     if(!isTestSuite) {
-        apply plugin: 'com.bmuschko.nexus'
-        apply plugin: 'maven-publish'
+        //apply plugin: 'com.bmuschko.nexus'
+        //apply plugin: 'maven-publish'
         apply plugin: 'signing'
     }
     apply plugin: 'eclipse'
@@ -361,66 +361,66 @@ subprojects { project ->
 
     if (!isTestSuite) {
 
-        modifyPom {
-            delegate.project {
-                def updatePom = pomInfo.clone()
-                updatePom.delegate = delegate
-                updatePom()
-            }
-        }
+        // modifyPom {
+        //     delegate.project {
+        //         def updatePom = pomInfo.clone()
+        //         updatePom.delegate = delegate
+        //         updatePom()
+        //     }
+        // }
 
-        publishing {
+        // publishing {
 
-            if (isBuildSnapshot) {
-                repositories {
-                    maven {
-                        credentials {
-                            def u = System.getenv("ARTIFACTORY_USERNAME") ?: project.hasProperty("artifactoryPublishUsername") ? project.artifactoryPublishUsername : ''
-                            def p = System.getenv("ARTIFACTORY_PASSWORD") ?: project.hasProperty("artifactoryPublishPassword") ? project.artifactoryPublishPassword : ''
-                            username = u
-                            password = p
-                        }
-                        url "https://repo.grails.org/grails/libs-snapshots-local"
-                    }
-                }
-            }
+        //     if (isBuildSnapshot) {
+        //         repositories {
+        //             maven {
+        //                 credentials {
+        //                     def u = System.getenv("ARTIFACTORY_USERNAME") ?: project.hasProperty("artifactoryPublishUsername") ? project.artifactoryPublishUsername : ''
+        //                     def p = System.getenv("ARTIFACTORY_PASSWORD") ?: project.hasProperty("artifactoryPublishPassword") ? project.artifactoryPublishPassword : ''
+        //                     username = u
+        //                     password = p
+        //                 }
+        //                 url "https://repo.grails.org/grails/libs-snapshots-local"
+        //             }
+        //         }
+        //     }
 
             if(project.name == 'grails-dependencies') return
             if(project.name == 'grails-bom') return
 
-            publications {
-                maven(MavenPublication) {
-                    from components.java
+            // publications {
+            //     maven(MavenPublication) {
+            //         from components.java
 
-                    afterEvaluate {
-                        artifact source: sourcesJar, classifier: "sources"
-                        artifact source: javadocJar, classifier: "javadoc"
-                    }
-                    pom.withXml {
-                        def xml = asNode()
+            //         afterEvaluate {
+            //             artifact source: sourcesJar, classifier: "sources"
+            //             artifact source: javadocJar, classifier: "javadoc"
+            //         }
+            //         pom.withXml {
+            //             def xml = asNode()
 
-                        xml.children().last() + pomInfo
-                    }
+            //             xml.children().last() + pomInfo
+            //         }
 
-                }
-            }
-        }
+            //     }
+            // }
+        // }
 
-        afterEvaluate {
-            signing {
-                required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
-                sign publishing.publications.maven
-            }
-        }
+        // afterEvaluate {
+        //     signing {
+        //         required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+        //         sign publishing.publications.maven
+        //     }
+        // }
 
         tasks.withType(Sign) {
             onlyIf { isReleaseVersion }
         }
 
         //do not generate extra load on Nexus with new staging repository if signing fails
-        tasks.withType(io.github.gradlenexus.publishplugin.InitializeNexusStagingRepository).configureEach {
-            shouldRunAfter(tasks.withType(Sign))
-        }
+        // tasks.withType(io.github.gradlenexus.publishplugin.InitializeNexusStagingRepository).configureEach {
+        //     shouldRunAfter(tasks.withType(Sign))
+        // }
     }
 
     if(project.name == 'grails-dependencies') return
@@ -444,6 +444,10 @@ subprojects { project ->
             api 'hsqldb:hsqldb:1.8.1.1'
             api "com.h2database:h2:$h2Version"
         }
+    }
+
+    tasks.withType(Jar) {
+        duplicatesStrategy = DuplicatesStrategy.WARN
     }
 
     jar{
@@ -571,14 +575,14 @@ subprojects { project ->
             }
         }
 
-        project.tasks.withType(org.gradle.api.publish.maven.tasks.PublishToMavenLocal) { org.gradle.api.publish.maven.tasks.PublishToMavenLocal t ->
-            t.dependsOn installToHomeDist
-            t.doLast {
-                ant.copy(todir: homeDistDir, flatten: true, includeEmptyDirs: false) {
-                    fileset dir: distInstallDir
-                }
-            }
-        }
+        // project.tasks.withType(org.gradle.api.publish.maven.tasks.PublishToMavenLocal) { org.gradle.api.publish.maven.tasks.PublishToMavenLocal t ->
+        //     t.dependsOn installToHomeDist
+        //     t.doLast {
+        //         ant.copy(todir: homeDistDir, flatten: true, includeEmptyDirs: false) {
+        //             fileset dir: distInstallDir
+        //         }
+        //     }
+        // }
     }
 }
 
